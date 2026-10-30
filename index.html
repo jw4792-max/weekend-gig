@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>周末帮 · 大学生周末兼职撮合平台</title>
+  <meta name="description" content="连接大学生与周边商家短期用工需求的周末兼职撮合平台 · 产品原型" />
+  <style>
+:root {
+  --primary: #FF6A3D;
+  --primary-2: #FF8F5E;
+  --primary-soft: #FFF1EB;
+  --ink: #1D2129;
+  --ink-2: #4E5969;
+  --ink-3: #86909C;
+  --line: #E9ECF1;
+  --bg: #F4F5F8;
+  --card: #FFFFFF;
+  --green: #12B76A;
+  --green-soft: #E7F8EF;
+  --blue: #3370FF;
+  --blue-soft: #EBF1FF;
+  --yellow: #F5A623;
+  --yellow-soft: #FFF6E5;
+  --red: #F04438;
+  --red-soft: #FEECEB;
+  --purple: #7B61FF;
+  --radius: 14px;
+  --shadow: 0 2px 10px rgba(29, 33, 41, .06);
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font); color: var(--ink); background: #EEF0F4; -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+input, textarea, select { font: inherit; color: inherit; }
+
+/* ---------- 顶栏 ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 50; height: 64px; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255, 255, 255, .92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-logo {
+  width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--primary), #FFB347); color: #fff; font-weight: 800; font-size: 19px;
+}
+.brand-name { font-weight: 800; font-size: 18px; letter-spacing: .5px; }
+.brand-sub { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+.top-actions { display: flex; align-items: center; gap: 12px; }
+.role-switch { display: flex; background: var(--bg); border-radius: 999px; padding: 4px; }
+.role-switch button { padding: 7px 16px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--ink-2); transition: .2s; }
+.role-switch button.on { background: #fff; color: var(--primary); box-shadow: 0 1px 4px rgba(0, 0, 0, .08); }
+.ghost-btn { padding: 8px 12px; border-radius: 10px; font-size: 13px; color: var(--ink-2); border: 1px solid var(--line); background: #fff; }
+.ghost-btn:hover { color: var(--primary); border-color: var(--primary); }
+
+/* ---------- 布局 ---------- */
+.layout { display: flex; gap: 40px; max-width: 1360px; margin: 0 auto; padding: 28px 28px 40px; align-items: flex-start; }
+.doc { flex: 1; min-width: 0; background: #fff; border-radius: 20px; padding: 40px 44px; box-shadow: var(--shadow); }
+.stage { position: sticky; top: 88px; flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; }
+.phone {
+  width: 390px; height: min(820px, calc(100vh - 140px)); min-height: 640px; border-radius: 46px; padding: 12px;
+  background: #1B1D22; box-shadow: 0 30px 60px rgba(29, 33, 41, .25), inset 0 0 0 2px #3A3D45;
+}
+.screen { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: var(--bg); display: flex; flex-direction: column; }
+.stage-tip { margin-top: 14px; font-size: 12px; color: var(--ink-3); }
+.only-mobile { display: none !important; }
+
+/* ---------- 手机内部 ---------- */
+.statusbar { height: 34px; flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 6px 26px 0; font-size: 13px; font-weight: 600; background: var(--hdr-bg, #fff); }
+.app-header { flex: 0 0 auto; background: #fff; padding: 6px 16px 10px; }
+.app-header.plain { display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.app-header.plain h2 { font-size: 17px; flex: 1; text-align: center; margin-right: 32px; }
+.back { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; }
+.back:hover { background: var(--bg); }
+.app-body { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 12px 14px 20px; scrollbar-width: none; }
+.app-body::-webkit-scrollbar { display: none; }
+.tabbar { flex: 0 0 auto; height: 62px; display: flex; background: #fff; border-top: 1px solid var(--line); padding-bottom: 6px; }
+.tabbar button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 11px; color: var(--ink-3); position: relative; }
+.tabbar button .ti { font-size: 20px; filter: grayscale(1); opacity: .6; }
+.tabbar button.on { color: var(--primary); font-weight: 600; }
+.tabbar button.on .ti { filter: none; opacity: 1; }
+.tabbar .dot { position: absolute; top: 6px; left: 55%; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--red); color: #fff; font-size: 10px; display: grid; place-items: center; }
+.bottom-bar { flex: 0 0 auto; background: #fff; border-top: 1px solid var(--line); padding: 10px 14px 14px; display: flex; gap: 10px; align-items: center; }
+
+/* 首页头部 */
+.home-top { display: flex; justify-content: space-between; align-items: center; }
+.loc { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+.loc small { font-weight: 400; color: var(--ink-3); font-size: 12px; }
+.credit-chip { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: 12px; font-weight: 700; }
+.search { margin-top: 10px; height: 36px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; padding: 0 12px; gap: 6px; color: var(--ink-3); font-size: 13px; }
+
+/* 通用卡片 */
+.card { background: var(--card); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); }
+.card + .card { margin-top: 10px; }
+.sec-title { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 2px 10px; }
+.sec-title h3 { font-size: 16px; }
+.sec-title span { font-size: 12px; color: var(--ink-3); }
+.muted { color: var(--ink-3); font-size: 12px; }
+.tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 6px; font-size: 11px; background: var(--bg); color: var(--ink-2); white-space: nowrap; }
+.tag.orange { background: var(--primary-soft); color: var(--primary); }
+.tag.green { background: var(--green-soft); color: var(--green); }
+.tag.blue { background: var(--blue-soft); color: var(--blue); }
+.tag.red { background: var(--red-soft); color: var(--red); }
+.tag.yellow { background: var(--yellow-soft); color: #C27C00; }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+/* 空闲时段选择 */
+.slot-card { background: linear-gradient(135deg, #FF6A3D, #FF9A5A); color: #fff; border-radius: 16px; padding: 14px; }
+.slot-card .h { display: flex; justify-content: space-between; align-items: center; }
+.slot-card h3 { font-size: 15px; }
+.slot-card .h span { font-size: 11px; opacity: .9; }
+.slot-grid { display: grid; grid-template-columns: 44px repeat(3, 1fr); gap: 6px; margin-top: 10px; align-items: center; }
+.slot-grid .d { font-size: 12px; font-weight: 600; line-height: 1.2; }
+.slot-grid .d small { display: block; font-weight: 400; opacity: .85; font-size: 10px; }
+.slot-btn { height: 34px; border-radius: 9px; background: rgba(255, 255, 255, .18); color: #fff; font-size: 12px; border: 1px dashed rgba(255, 255, 255, .5); transition: .15s; }
+.slot-btn.on { background: #fff; color: var(--primary); font-weight: 700; border: 1px solid #fff; }
+.slot-foot { margin-top: 10px; font-size: 12px; display: flex; justify-content: space-between; opacity: .95; }
+.slot-foot b { font-size: 14px; }
+
+/* 急招横滑 */
+.hscroll { display: flex; gap: 10px; overflow-x: auto; margin: 0 -14px; padding: 2px 14px 4px; scrollbar-width: none; }
+.hscroll::-webkit-scrollbar { display: none; }
+.urgent-card { flex: 0 0 210px; background: #fff; border-radius: 14px; padding: 12px; box-shadow: var(--shadow); border: 1px solid #FFE1D6; cursor: pointer; }
+.urgent-card .t { font-weight: 700; font-size: 14px; margin: 6px 0 4px; }
+.urgent-card .w { color: var(--primary); font-weight: 800; }
+.urgent-card .left { font-size: 11px; color: var(--red); margin-top: 6px; }
+
+/* 筛选 */
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 -14px; padding: 0 14px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: 0 0 auto; padding: 6px 12px; border-radius: 999px; font-size: 12px; background: #fff; color: var(--ink-2); border: 1px solid var(--line); }
+.chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+.sort-row { display: flex; gap: 16px; margin: 12px 2px 8px; font-size: 13px; color: var(--ink-3); }
+.sort-row button.on { color: var(--ink); font-weight: 700; position: relative; }
+.sort-row button.on::after { content: ""; position: absolute; left: 20%; right: 20%; bottom: -4px; height: 3px; border-radius: 2px; background: var(--primary); }
+
+/* 岗位卡片 */
+.job { display: block; background: #fff; border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); cursor: pointer; transition: transform .15s; width: 100%; text-align: left; }
+.job + .job { margin-top: 10px; }
+.job:active { transform: scale(.985); }
+.job-top { display: flex; gap: 10px; }
+.mlogo { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-size: 22px; flex: 0 0 auto; }
+.job-main { flex: 1; min-width: 0; }
+.job-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.job-title .tag { font-weight: 600; }
+.job-m { font-size: 12px; color: var(--ink-3); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+.verified { color: var(--blue); font-size: 11px; }
+.ring { width: 46px; height: 46px; flex: 0 0 auto; position: relative; }
+.ring svg { transform: rotate(-90deg); }
+.ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 13px; font-weight: 800; }
+.ring small { position: absolute; bottom: -14px; left: 0; right: 0; text-align: center; font-size: 9px; color: var(--ink-3); }
+.job-info { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; }
+.job-time { font-size: 13px; color: var(--ink-2); }
+.job-time div + div { margin-top: 3px; }
+.wage { text-align: right; }
+.wage b { font-size: 20px; color: var(--primary); }
+.wage span { font-size: 12px; color: var(--primary); }
+.wage div { font-size: 11px; color: var(--ink-3); }
+.reasons { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); display: flex; flex-wrap: wrap; gap: 5px; }
+.reason { font-size: 11px; padding: 2px 7px; border-radius: 6px; }
+.reason.good { background: var(--green-soft); color: var(--green); }
+.reason.warn { background: var(--yellow-soft); color: #C27C00; }
+.reason.bad { background: var(--red-soft); color: var(--red); }
+.job.applied { opacity: .75; }
+.empty { text-align: center; padding: 40px 10px; color: var(--ink-3); font-size: 13px; }
+.empty .e { font-size: 40px; margin-bottom: 8px; }
+
+/* 详情页 */
+.detail-hero { background: #fff; border-radius: 16px; padding: 16px; box-shadow: var(--shadow); }
+.detail-hero h1 { font-size: 20px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.detail-hero .pay { margin-top: 10px; display: flex; align-items: baseline; gap: 6px; }
+.detail-hero .pay b { font-size: 26px; color: var(--primary); }
+.detail-hero .pay span { color: var(--primary); font-size: 13px; }
+.kv { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.kv div { background: var(--bg); border-radius: 10px; padding: 8px; text-align: center; }
+.kv b { display: block; font-size: 14px; }
+.kv span { font-size: 11px; color: var(--ink-3); }
+.match-box { background: linear-gradient(180deg, #FFF6F1, #fff); border: 1px solid #FFE1D6; }
+.match-head { display: flex; align-items: center; gap: 12px; }
+.match-head .big { font-size: 32px; font-weight: 800; color: var(--primary); }
+.match-head .big small { font-size: 14px; }
+.bars { margin-top: 12px; display: grid; gap: 9px; }
+.bar-row { display: grid; grid-template-columns: 84px 1fr 96px; align-items: center; gap: 8px; font-size: 12px; }
+.bar-row .w { color: var(--ink-3); font-size: 10px; }
+.bar { height: 7px; background: #F0F1F4; border-radius: 4px; overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 4px; background: var(--primary); }
+.bar-row .note { color: var(--ink-2); font-size: 11px; text-align: right; }
+.merchant-row { display: flex; gap: 10px; align-items: center; }
+.merchant-row .n { font-weight: 700; display: flex; gap: 6px; align-items: center; }
+.mstats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 12px; text-align: center; }
+.mstats b { display: block; font-size: 16px; }
+.mstats span { font-size: 11px; color: var(--ink-3); }
+.mstats div + div { border-left: 1px solid var(--line); }
+.p { font-size: 13px; line-height: 1.7; color: var(--ink-2); }
+.card h4 { font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.rule-list { display: grid; gap: 6px; font-size: 12px; color: var(--ink-2); }
+.rule-list div { display: flex; gap: 6px; }
+.alert { border-radius: 12px; padding: 10px 12px; font-size: 12px; line-height: 1.6; display: flex; gap: 8px; }
+.alert.warn { background: var(--yellow-soft); color: #8A5A00; }
+.alert.bad { background: var(--red-soft); color: #B42318; }
+.alert.info { background: var(--blue-soft); color: #1D4ED8; }
+.alert.ok { background: var(--green-soft); color: #067647; }
+
+/* 按钮 */
+.btn { height: 44px; border-radius: 12px; padding: 0 18px; font-size: 15px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.btn.primary { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; box-shadow: 0 4px 12px rgba(255, 106, 61, .3); }
+.btn.secondary { background: var(--bg); color: var(--ink); }
+.btn.disabled { background: #E5E6EB; color: var(--ink-3); box-shadow: none; cursor: default; }
+.btn.block { flex: 1; }
+.btn.sm { height: 32px; font-size: 13px; padding: 0 12px; border-radius: 9px; }
+.icon-btn { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--ink-2); gap: 2px; padding: 0 6px; }
+.icon-btn span { font-size: 20px; }
+.sim-btn { border: 1px dashed var(--purple); color: var(--purple); background: #F4F1FF; border-radius: 9px; padding: 6px 10px; font-size: 12px; font-weight: 600; }
+
+/* 底部弹层 */
+.mask { position: absolute; inset: 0; background: rgba(0, 0, 0, .45); z-index: 20; display: flex; align-items: flex-end; animation: fade .2s; }
+.sheet { width: 100%; max-height: 88%; overflow-y: auto; background: #fff; border-radius: 20px 20px 0 0; padding: 18px 16px 20px; animation: up .25s ease-out; }
+.sheet h3 { font-size: 17px; text-align: center; margin-bottom: 12px; }
+.sheet .grab { width: 36px; height: 4px; border-radius: 2px; background: var(--line); margin: -6px auto 12px; }
+.sheet-actions { display: flex; gap: 10px; margin-top: 16px; }
+@keyframes up { from { transform: translateY(100%); } }
+@keyframes fade { from { opacity: 0; } }
+
+.toast { position: absolute; left: 50%; top: 90px; transform: translateX(-50%); z-index: 40; background: rgba(29, 33, 41, .92); color: #fff; padding: 10px 16px; border-radius: 12px; font-size: 13px; max-width: 86%; text-align: center; line-height: 1.5; animation: fade .2s; pointer-events: none; }
+
+.wip { text-align: center; padding: 60px 20px; color: var(--ink-3); }
+.wip .e { font-size: 46px; }
+.wip h3 { color: var(--ink); margin: 10px 0 6px; }
+
+/* ---------- 左侧设计说明 ---------- */
+.doc h1 { font-size: 30px; line-height: 1.3; letter-spacing: .5px; }
+.doc .lead { margin-top: 12px; font-size: 16px; color: var(--ink-2); line-height: 1.8; }
+.doc h2 { font-size: 21px; margin: 44px 0 14px; display: flex; align-items: center; gap: 10px; }
+.doc h2 .no { font-size: 13px; color: var(--primary); background: var(--primary-soft); border-radius: 8px; padding: 3px 8px; font-weight: 700; }
+.doc h3 { font-size: 16px; margin: 20px 0 8px; }
+.doc p, .doc li { font-size: 14px; line-height: 1.85; color: var(--ink-2); }
+.doc ul { padding-left: 20px; }
+.doc strong { color: var(--ink); }
+.doc-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.doc-nav a { font-size: 13px; color: var(--ink-2); text-decoration: none; padding: 6px 12px; border-radius: 999px; background: var(--bg); }
+.doc-nav a:hover { color: var(--primary); background: var(--primary-soft); }
+.hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+.hero-stats div { border-radius: 14px; padding: 16px; background: var(--bg); }
+.hero-stats b { font-size: 22px; color: var(--primary); display: block; }
+.hero-stats span { font-size: 13px; color: var(--ink-2); }
+.tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.tbl th, .tbl td { border-bottom: 1px solid var(--line); padding: 10px 10px; text-align: left; vertical-align: top; line-height: 1.6; color: var(--ink-2); }
+.tbl th { background: var(--bg); color: var(--ink); font-weight: 700; white-space: nowrap; }
+.tbl td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+.callout { border-left: 4px solid var(--primary); background: var(--primary-soft); padding: 14px 16px; border-radius: 0 12px 12px 0; margin: 14px 0; font-size: 14px; line-height: 1.8; color: var(--ink-2); }
+.callout b { color: var(--ink); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.persona { border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+.persona .ph { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+.persona .av { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; }
+.persona .ph b { font-size: 15px; }
+.persona .ph span { display: block; font-size: 12px; color: var(--ink-3); }
+.persona li { font-size: 13px; }
+.flow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 12px 0; }
+.flow .st { background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 12px; font-size: 13px; font-weight: 600; text-align: center; }
+.flow .st small { display: block; font-weight: 400; color: var(--ink-3); font-size: 11px; margin-top: 2px; }
+.flow .st.hl { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+.flow .ar { color: var(--ink-3); }
+.arch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.arch .col { border-radius: 14px; padding: 14px; background: var(--bg); }
+.arch .col h4 { font-size: 14px; margin-bottom: 10px; }
+.arch .col div { background: #fff; border-radius: 9px; padding: 7px 10px; font-size: 12.5px; color: var(--ink-2); margin-top: 6px; }
+.arch .col div b { color: var(--ink); }
+.formula { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background: #1D2129; color: #E6E8EB; border-radius: 12px; padding: 14px 16px; font-size: 13px; line-height: 1.8; overflow-x: auto; }
+.formula em { color: #FFB38F; font-style: normal; }
+.guide { display: grid; gap: 8px; margin-top: 10px; }
+.guide button { text-align: left; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; color: var(--ink-2); transition: .15s; background: #fff; }
+.guide button:hover { border-color: var(--primary); color: var(--ink); background: var(--primary-soft); }
+.guide button i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 12px; display: grid; place-items: center; flex: 0 0 auto; }
+.guide button span { margin-left: auto; color: var(--primary); font-size: 12px; }
+.guide button.todo { opacity: .5; }
+.road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.road div { border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+.road b { color: var(--primary); }
+.road p { font-size: 13px; margin-top: 6px; }
+
+/* ---------- 移动端 ---------- */
+@media (max-width: 960px) {
+  .only-mobile { display: inline-flex !important; }
+  .only-desktop { display: none !important; }
+  .topbar { height: 52px; padding: 0 12px; }
+  .brand-sub { display: none; }
+  .brand-logo { width: 30px; height: 30px; font-size: 15px; border-radius: 9px; }
+  .brand-name { font-size: 16px; }
+  .role-switch button { padding: 6px 10px; font-size: 13px; }
+  .top-actions { gap: 6px; }
+  .ghost-btn { padding: 6px 8px; font-size: 12px; }
+  .layout { padding: 0; display: block; }
+  .stage { position: static; }
+  .phone { width: 100%; height: calc(100vh - 52px); height: calc(100dvh - 52px); min-height: 0; border-radius: 0; padding: 0; background: none; box-shadow: none; }
+  .screen { border-radius: 0; }
+  .statusbar { display: none; }
+  .doc { display: none; position: fixed; inset: 52px 0 0 0; z-index: 60; border-radius: 0; padding: 20px 18px 40px; overflow-y: auto; }
+  body.doc-open .doc { display: block; }
+  .doc-close { margin-bottom: 14px; padding: 8px 14px; border-radius: 10px; background: var(--bg); font-size: 13px; }
+  .doc h1 { font-size: 24px; }
+  .grid2, .arch, .road { grid-template-columns: 1fr; }
+  .hero-stats { gap: 8px; }
+  .hero-stats div { padding: 10px; }
+  .hero-stats b { font-size: 17px; }
+  .hero-stats span { font-size: 11px; }
+  .doc h2 { font-size: 18px; }
+  .tbl { display: block; overflow-x: auto; }
+}
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo">周</span>
+      <div>
+        <div class="brand-name">周末帮</div>
+        <div class="brand-sub">大学生周末兼职撮合平台 · 可交互产品原型</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="role-switch" role="tablist">
+        <button data-act="role" data-role="student" class="on">🎓 学生端</button>
+        <button data-act="role" data-role="merchant">🏪 商家端</button>
+      </div>
+      <button class="ghost-btn only-mobile" data-act="openDoc">📖 设计说明</button>
+      <button class="ghost-btn only-desktop" data-act="reset" title="清空本地演示数据">↺ 重置演示</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左侧：产品设计说明 -->
+    <article class="doc" id="doc">
+      <button class="doc-close only-mobile" data-act="closeDoc">✕ 返回原型</button>
+      <div id="doc-content"></div>
+    </article>
+
+    <!-- 右侧：手机原型 -->
+    <section class="stage">
+      <div class="phone">
+        <div class="screen" id="app"></div>
+      </div>
+      <p class="stage-tip only-desktop">💡 原型中的「⚡ 模拟」按钮用于演示另一方的操作 · 数据仅保存在你的浏览器</p>
+    </section>
+  </main>
+
+  <script>
+/* ============================================================
+ * 周末帮 · 演示数据（全部为虚构示例数据）
+ * ============================================================ */
+
+// 计算"本周末"日期：周一~周五 → 即将到来的周六；周六 → 当天；周日 → 下周六
+const WEEKEND = (() => {
+  const now = new Date();
+  const d = now.getDay(); // 0=Sun
+  const add = d === 6 ? 0 : d === 0 ? 6 : 6 - d;
+  const sat = new Date(now.getFullYear(), now.getMonth(), now.getDate() + add);
+  const sun = new Date(sat.getFullYear(), sat.getMonth(), sat.getDate() + 1);
+  return { sat, sun };
+})();
+
+const SLOTS = [
+  { id: 'sat-am', day: 'sat', label: '周六上午', s: 8, e: 13 },
+  { id: 'sat-pm', day: 'sat', label: '周六下午', s: 13, e: 18 },
+  { id: 'sat-ev', day: 'sat', label: '周六晚上', s: 18, e: 22 },
+  { id: 'sun-am', day: 'sun', label: '周日上午', s: 8, e: 13 },
+  { id: 'sun-pm', day: 'sun', label: '周日下午', s: 13, e: 18 },
+  { id: 'sun-ev', day: 'sun', label: '周日晚上', s: 18, e: 22 },
+];
+
+const SKILLS = ['收银', '餐饮服务', '沟通表达', '活动执行', '教学辅导', '摄影', '体力劳动'];
+
+const CATS = [
+  { id: 'all', name: '全部', icon: '✨' },
+  { id: 'food', name: '餐饮', icon: '🧋' },
+  { id: 'retail', name: '零售', icon: '🛒' },
+  { id: 'event', name: '活动会展', icon: '🎪' },
+  { id: 'edu', name: '教育', icon: '📚' },
+  { id: 'promo', name: '推广', icon: '📣' },
+  { id: 'logistics', name: '物流', icon: '📦' },
+  { id: 'media', name: '摄影', icon: '📷' },
+];
+
+// 岗位类别 → 积累的技能
+const CAT_SKILLS = {
+  food: ['餐饮服务', '收银'],
+  retail: ['收银', '沟通表达'],
+  event: ['活动执行', '沟通表达'],
+  edu: ['教学辅导', '沟通表达'],
+  promo: ['沟通表达', '活动执行'],
+  logistics: ['体力劳动'],
+  media: ['摄影', '活动执行'],
+};
+
+const MERCHANTS = {
+  m1: { id: 'm1', name: '柠檬茶研所', type: '茶饮店', logo: '🍋', color: '#FFC53D', verified: true, rating: 4.9, payOnTime: 100, rehire: 68, workers: 126, addr: '学府路 88 号（东门步行 12 分钟）' },
+  m2: { id: 'm2', name: '星河会展中心', type: '会展场馆', logo: '🎪', color: '#7B61FF', verified: true, rating: 4.7, payOnTime: 98, rehire: 52, workers: 860, addr: '星河大道 1 号' },
+  m3: { id: 'm3', name: '拾页书店', type: '独立书店', logo: '📖', color: '#36B37E', verified: true, rating: 5.0, payOnTime: 100, rehire: 80, workers: 34, addr: '文苑街 12 号' },
+  m4: { id: 'm4', name: '邻里生鲜', type: '社区超市', logo: '🥬', color: '#52C41A', verified: true, rating: 4.6, payOnTime: 97, rehire: 45, workers: 210, addr: '学府路 21 号' },
+  m5: { id: 'm5', name: '小码星少儿编程', type: '教育机构', logo: '🤖', color: '#3370FF', verified: true, rating: 4.8, payOnTime: 100, rehire: 71, workers: 58, addr: '科创园 B 座 3 楼' },
+  m6: { id: 'm6', name: '半岛咖啡', type: '咖啡馆', logo: '☕', color: '#8D6E63', verified: true, rating: 4.8, payOnTime: 99, rehire: 60, workers: 47, addr: '湖滨路 6 号' },
+  m7: { id: 'm7', name: '光影婚礼策划', type: '婚庆策划', logo: '💐', color: '#FF7EB3', verified: true, rating: 4.7, payOnTime: 96, rehire: 40, workers: 73, addr: '城南创意园 5 号楼' },
+  m8: { id: 'm8', name: '动力健身', type: '健身房', logo: '💪', color: '#FF6A3D', verified: true, rating: 4.5, payOnTime: 95, rehire: 38, workers: 92, addr: '学府路 66 号' },
+  m9: { id: 'm9', name: '校门口快递驿站', type: '快递驿站', logo: '📦', color: '#13C2C2', verified: true, rating: 4.6, payOnTime: 100, rehire: 75, workers: 64, addr: '学校东门旁' },
+  m10: { id: 'm10', name: '跃动运动快闪店', type: '品牌快闪', logo: '👟', color: '#F5222D', verified: true, rating: 4.6, payOnTime: 98, rehire: 35, workers: 150, addr: '万象商场 1F 中庭' },
+};
+
+// filledBase：平台上其他学生已录用的人数（演示用）；hired/applicants/backups：可在商家端操作的候选人
+const JOBS = [
+  { id: 'j1', mid: 'm1', title: '周末茶饮店员', cat: 'food', day: 'sat', s: 13, e: 18, wage: 22, dist: 1.2, skills: { 收银: 1, 餐饮服务: 1 }, head: 3, filledBase: 0, hired: ['c4'], applicants: ['c1', 'c2', 'c3', 'c5'], backups: [], urgent: false, desc: '负责点单收银、饮品出杯、简单打扫。上岗前有 15 分钟带教，零经验可做。', perks: ['包一杯饮品', '日结', '有带教'] },
+  { id: 'j2', mid: 'm2', title: '动漫展检票引导', cat: 'event', day: 'sun', s: 9, e: 17, wage: 25, dist: 4.8, skills: { 沟通表达: 2 }, head: 10, filledBase: 6, hired: [], applicants: [], backups: [], urgent: true, desc: '展会入口检票、观众动线引导、现场秩序维护。需要穿统一 T 恤，提供午餐。', perks: ['包午餐', '日结', '可开志愿证明'] },
+  { id: 'j3', mid: 'm3', title: '周日读书会助理', cat: 'event', day: 'sun', s: 14, e: 18, wage: 20, dist: 0.8, skills: { 沟通表达: 1 }, head: 1, filledBase: 0, hired: [], applicants: [], backups: [], urgent: false, desc: '协助读书会签到、布置场地、拍照记录，活动结束后整理书架。', perks: ['环境安静', '赠书一本'] },
+  { id: 'j4', mid: 'm4', title: '周末理货补货', cat: 'retail', day: 'sat', s: 8, e: 12, wage: 20, dist: 1.5, skills: { 体力劳动: 1 }, head: 3, filledBase: 1, hired: [], applicants: [], backups: [], urgent: false, desc: '早高峰前完成货架补货、临期商品整理、价签核对。', perks: ['日结', '员工价购物'] },
+  { id: 'j5', mid: 'm5', title: '编程体验课助教', cat: 'edu', day: 'sat', s: 14, e: 17.5, wage: 35, dist: 2.3, skills: { 教学辅导: 2 }, head: 2, filledBase: 1, hired: [], applicants: [], backups: [], urgent: true, desc: '协助主讲老师带 6-10 岁孩子做图形化编程，课前 30 分钟会有培训。计算机/教育相关专业优先。', perks: ['时薪高', '可开实习证明', '长期合作机会'] },
+  { id: 'j6', mid: 'm6', title: '咖啡吧台助手', cat: 'food', day: 'sun', s: 10, e: 15, wage: 23, dist: 2.0, skills: { 餐饮服务: 2 }, head: 1, filledBase: 0, hired: [], applicants: [], backups: [], urgent: false, desc: '协助咖啡师备料、出品、清洁吧台，表现好可学拉花。', perks: ['学拉花', '包工作餐'] },
+  { id: 'j7', mid: 'm7', title: '婚礼跟拍助理', cat: 'media', day: 'sat', s: 15, e: 21, wage: 30, dist: 6.5, skills: { 摄影: 2, 活动执行: 1 }, head: 2, filledBase: 1, hired: [], applicants: [], backups: [], urgent: false, desc: '协助主摄影师搬运器材、补光、拍摄花絮。自带相机者优先。', perks: ['作品可署名', '包晚餐'] },
+  { id: 'j8', mid: 'm8', title: '健身体验券地推', cat: 'promo', day: 'sat', s: 18, e: 21, wage: 24, dist: 1.0, skills: { 沟通表达: 2 }, head: 4, filledBase: 2, hired: [], applicants: [], backups: [], urgent: true, desc: '在商圈派发体验券并引导到店，底薪 24 元/时 + 每成功到店 1 人提成 5 元。', perks: ['有提成', '日结'] },
+  { id: 'j9', mid: 'm9', title: '快递驿站晚间分拣', cat: 'logistics', day: 'sun', s: 18, e: 21, wage: 22, dist: 0.5, skills: { 体力劳动: 1 }, head: 2, filledBase: 0, hired: [], applicants: [], backups: [], urgent: false, desc: '周日晚间返校高峰，协助包裹分拣上架和取件引导。', perks: ['离学校最近', '日结'] },
+  { id: 'j10', mid: 'm10', title: '运动快闪店促销员', cat: 'promo', day: 'sun', s: 11, e: 19, wage: 26, dist: 3.6, skills: { 沟通表达: 2, 收银: 1 }, head: 4, filledBase: 3, hired: [], applicants: [], backups: [], urgent: false, desc: '快闪店产品讲解、试穿引导、扫码收银。形象气质佳，需站立。', perks: ['送品牌周边', '日结'] },
+  { id: 'j11', mid: 'm1', title: '周六晚高峰外卖打包', cat: 'food', day: 'sat', s: 17, e: 21, wage: 21, dist: 1.2, skills: { 餐饮服务: 1 }, head: 2, filledBase: 0, hired: [], applicants: ['c6', 'c2'], backups: [], urgent: false, desc: '晚高峰外卖订单打包、核单、交接骑手。', perks: ['包一杯饮品', '日结'] },
+];
+
+// 平台上的其他学生（商家端候选人）
+const CANDIDATES = {
+  c1: { id: 'c1', name: '王同学', grade: '大三 · 工商管理', color: '#FF8A65', credit: 99, dist: 0.6, skills: { 收银: 3, 餐饮服务: 3, 沟通表达: 2 }, slots: ['sat-pm', 'sat-ev', 'sun-pm'], done: 32, rehire: 3, rating: 4.9 },
+  c2: { id: 'c2', name: '陈同学', grade: '大一 · 软件工程', color: '#64B5F6', credit: 88, dist: 2.4, skills: { 餐饮服务: 1, 体力劳动: 2 }, slots: ['sat-am', 'sat-pm', 'sat-ev'], done: 4, rehire: 0, rating: 4.6 },
+  c3: { id: 'c3', name: '李同学', grade: '大二 · 英语', color: '#BA68C8', credit: 95, dist: 1.1, skills: { 收银: 2, 沟通表达: 3 }, slots: ['sat-pm', 'sun-am'], done: 15, rehire: 1, rating: 4.8 },
+  c4: { id: 'c4', name: '赵同学', grade: '大二 · 会计', color: '#4DB6AC', credit: 97, dist: 0.9, skills: { 收银: 3, 餐饮服务: 2 }, slots: ['sat-pm', 'sun-pm'], done: 21, rehire: 2, rating: 4.9 },
+  c5: { id: 'c5', name: '孙同学', grade: '研一 · 新闻传播', color: '#FFB74D', credit: 76, dist: 3.8, skills: { 餐饮服务: 1, 摄影: 3 }, slots: ['sat-pm'], done: 9, rehire: 0, rating: 4.3 },
+  c6: { id: 'c6', name: '周同学', grade: '大三 · 物流管理', color: '#90A4AE', credit: 92, dist: 1.6, skills: { 餐饮服务: 2, 体力劳动: 3 }, slots: ['sat-ev', 'sun-ev'], done: 18, rehire: 1, rating: 4.7 },
+  c7: { id: 'c7', name: '吴同学', grade: '大四 · 市场营销', color: '#F06292', credit: 98, dist: 1.3, skills: { 收银: 2, 餐饮服务: 2, 沟通表达: 3 }, slots: ['sat-am', 'sat-pm', 'sat-ev', 'sun-pm'], done: 40, rehire: 4, rating: 5.0 },
+  c8: { id: 'c8', name: '郑同学', grade: '大二 · 数学', color: '#7986CB', credit: 90, dist: 2.0, skills: { 收银: 1, 教学辅导: 3 }, slots: ['sat-pm', 'sun-pm', 'sun-ev'], done: 7, rehire: 0, rating: 4.7 },
+};
+
+// 当前学生用户（演示身份）
+function monthAgo(n) {
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() - n);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
+
+const ME = {
+  id: 'me', name: '林同学', grade: '大二 · 视觉传达', color: '#FF6A3D', school: '示例大学', credit: 96, dist: 0,
+  verified: { student: true, realname: true },
+  slots: ['sat-pm', 'sat-ev', 'sun-am', 'sun-pm'],
+  // 技能经验值：每 100 XP 升一级，最高 Lv5
+  xp: { 收银: 210, 餐饮服务: 150, 沟通表达: 260, 活动执行: 120, 教学辅导: 40, 摄影: 180, 体力劳动: 60 },
+  creditLog: [
+    { t: monthAgo(0) + '-12', text: '准时到岗 · 半岛咖啡', d: +2 },
+    { t: monthAgo(1) + '-20', text: '商家五星好评 · 星河会展中心', d: +1 },
+    { t: monthAgo(1) + '-06', text: '开工前 3 小时取消 · 邻里生鲜', d: -10 },
+    { t: monthAgo(2) + '-15', text: '完成学生认证', d: +5 },
+  ],
+  history: [
+    { title: '咖啡吧台助手', merchant: '半岛咖啡', cat: 'food', month: monthAgo(0), hours: 5, income: 115, rating: 5, comment: '手脚麻利，学东西很快，欢迎再来！' },
+    { title: '漫展检票引导', merchant: '星河会展中心', cat: 'event', month: monthAgo(1), hours: 8, income: 200, rating: 5, comment: '沟通很有耐心，处理排队问题很得体。' },
+    { title: '新书发布会摄影', merchant: '拾页书店', cat: 'media', month: monthAgo(1), hours: 4, income: 120, rating: 5, comment: '照片质量超出预期。' },
+    { title: '周末茶饮店员', merchant: '柠檬茶研所', cat: 'food', month: monthAgo(2), hours: 5, income: 110, rating: 4, comment: '态度认真，出杯速度还可以再提升。' },
+    { title: '开学季迎新地推', merchant: '动力健身', cat: 'promo', month: monthAgo(2), hours: 3, income: 92, rating: 5, comment: '' },
+    { title: '超市理货补货', merchant: '邻里生鲜', cat: 'retail', month: monthAgo(3), hours: 4, income: 80, rating: 4, comment: '' },
+    { title: '音乐节检票', merchant: '星河会展中心', cat: 'event', month: monthAgo(4), hours: 8, income: 200, rating: 5, comment: '' },
+  ],
+};
+
+// 初始订单：一单已录用（可体验签到流程）
+const ORDERS = [
+  { id: 'o1', jobId: 'j3', status: 'hired', log: [{ t: '昨天 20:14', text: '报名成功' }, { t: '昨天 21:02', text: '拾页书店 已录用你' }] },
+];
+
+const WAGE_REF = { food: [20, 24], retail: [19, 23], event: [22, 28], edu: [30, 45], promo: [22, 28], logistics: [20, 24], media: [25, 40] };
+
+const TEMPLATES = [
+  { cat: 'food', title: '周末店员', icon: '🧋', skills: { 收银: 1, 餐饮服务: 1 }, desc: '点单收银、出品、简单清洁，有带教。' },
+  { cat: 'food', title: '外卖打包', icon: '🥡', skills: { 餐饮服务: 1 }, desc: '高峰期订单打包、核单、交接骑手。' },
+  { cat: 'promo', title: '门店地推', icon: '📣', skills: { 沟通表达: 2 }, desc: '商圈派发传单/优惠券，引导顾客到店。' },
+  { cat: 'event', title: '活动执行', icon: '🎈', skills: { 活动执行: 1, 沟通表达: 1 }, desc: '活动签到、场地布置、现场引导。' },
+];
+
+</script>
+  <script>
+/* 左侧：产品设计说明 */
+const DOC_HTML = `
+<div class="tags"><span class="tag orange">产品原型</span><span class="tag">AI Coding 作业</span><span class="tag">V1.0</span></div>
+<h1 style="margin-top:12px">周末帮：让一次 5 小时的兼职，<br/>找起来也只需要 5 分钟</h1>
+<p class="lead">连接大学生的<strong>周末空闲时间</strong>与周边商家的<strong>短期用工高峰</strong>。通过「按时段智能匹配 + 履约保障 + 成长沉淀」，把原本散落在微信群里、靠熟人转发的零散信息，变成可信、可追踪、可积累的标准化撮合。</p>
+<div class="hero-stats">
+  <div><b>5 分钟</b><span>学生从打开到报名</span></div>
+  <div><b>30 分钟</b><span>商家急招平均招满目标</span></div>
+  <div><b>95%+</b><span>到岗率目标（替补池兜底）</span></div>
+</div>
+<nav class="doc-nav">
+  <a href="#s-guide">🧭 体验导览</a><a href="#s-problem">问题本质</a><a href="#s-pain">用户痛点</a><a href="#s-persona">用户画像</a>
+  <a href="#s-arch">功能架构</a><a href="#s-flow">核心闭环</a><a href="#s-highlight">核心亮点</a><a href="#s-metric">指标与路线</a>
+</nav>
+
+<h2 id="s-guide"><span class="no">00</span>体验导览：建议按这个顺序点一点</h2>
+<p>右侧是可交互的手机原型，点击下面的步骤可直接跳转到对应页面。</p>
+<div class="guide">
+  <button data-act="guide" data-role="student" data-page="home"><i>1</i>学生端：设置周末空闲时段，看推荐如何实时变化<span>去体验 →</span></button>
+  <button data-act="guide" data-role="student" data-page="job" data-id="j5"><i>2</i>查看岗位详情：匹配度拆解、商家信用、履约保障<span>去体验 →</span></button>
+  <button data-act="guide" data-role="student" data-page="job" data-id="j2" data-modal="apply"><i>3</i>一键报名：时间冲突自动提醒、信用规则提示<span>去体验 →</span></button>
+  <button class="todo"><i>4</i>我的兼职：签到 → 完工 → 结算 → 评价（制作中）</button>
+  <button class="todo"><i>5</i>成长：信用分、技能雷达、兼职经历证明（制作中）</button>
+  <button class="todo"><i>6</i>商家端：粘贴群消息智能发布、候选人筛选、替补池（制作中）</button>
+</div>
+
+<h2 id="s-problem"><span class="no">01</span>问题本质：交易成本与交易价值不对等</h2>
+<div class="callout">一单周末兼职通常只有 <b>4–8 小时、收入 100–200 元</b>，但「找 → 筛 → 确认 → 担心靠不靠谱」的成本，几乎和招一个长期工一样高。<br/>结果是：<b>学生觉得不值得到处找，商家觉得不值得认真招</b>，最终只能依赖熟人和微信群，效率低、风险高。</div>
+<p>把题目里的"匹配效率低"拆开来看，其实是三类成本：</p>
+<ul>
+  <li><strong>搜寻成本</strong>：信息分散在各个微信群、朋友圈、海报上，存在严重的<strong>双向信息差</strong>：学生不知道去哪里进群，商家不知道学生在哪些群里。</li>
+  <li><strong>筛选与确认成本</strong>：时间、距离、能力要一个个私聊确认，而周末用工<strong>时效性极强</strong>，周五缺人、周六就要到岗。</li>
+  <li><strong>履约不确定性</strong>：学生怕骗局和被拖欠工资，商家怕被放鸽子。缺乏信任，就只能用"熟人"来兜底。</li>
+</ul>
+
+<h2 id="s-pain"><span class="no">02</span>用户痛点</h2>
+<table class="tbl">
+  <tr><th></th><th>🎓 学生</th><th>🏪 商家</th></tr>
+  <tr><td>找不到</td><td>不知道去哪里进群；群消息刷屏，岗位很快过期；层层转发后信息失真、被加价</td><td>不知道学生在哪；发出去很快被淹没；要托人转发，依赖人脉</td></tr>
+  <tr><td>配不上</td><td>兼职时间和课表、考试周冲突；路太远，通勤吃掉收入；零经验常被拒</td><td>要一个个私聊确认时间和能力；临时高峰来不及招人</td></tr>
+  <tr><td>不敢信</td><td>押金、中介费、刷单骗局；只有口头约定，工资被拖欠</td><td><strong>被放鸽子</strong>（最痛）；不知道学生靠不靠谱</td></tr>
+  <tr><td>留不住</td><td>做过的兼职没法证明；收入零散、不稳定</td><td>好用的学生下次找不到；每次来新人都要重新培训</td></tr>
+</table>
+
+<h2 id="s-persona"><span class="no">03</span>用户画像</h2>
+<div class="grid2">
+  <div class="persona">
+    <div class="ph"><div class="av" style="background:#FFF1EB">🎓</div><div><b>林同学 · 大二</b><span>视觉传达专业 · 每月生活费 1800 元</span></div></div>
+    <ul><li>周末有半天到一天空闲，希望每月多挣 500–800 元</li><li>只敢做"看起来靠谱"的兼职，被群里的押金骗局吓到过</li><li>希望兼职能积累点经历，写进实习简历</li></ul>
+  </div>
+  <div class="persona">
+    <div class="ph"><div class="av" style="background:#FFF6E5">🍋</div><div><b>王老板 · 茶饮店主</b><span>店铺离学校 1km · 3 名全职员工</span></div></div>
+    <ul><li>周末客流是平时的 2–3 倍，每周需要 2–3 名临时店员</li><li>以前靠在学生群里发消息，经常临时有人不来</li><li>希望招过的靠谱学生能"下次直接约"</li></ul>
+  </div>
+</div>
+
+<h2 id="s-arch"><span class="no">04</span>功能架构</h2>
+<div class="arch">
+  <div class="col"><h4>🎓 学生端</h4>
+    <div><b>发现</b>：空闲时段设置、智能推荐、急招、筛选排序</div>
+    <div><b>岗位详情</b>：匹配度拆解、商家信用、一键报名</div>
+    <div><b>我的兼职</b>：状态追踪、定位签到、完工结算、评价</div>
+    <div><b>成长</b>：信用分、技能等级、收入统计、经历证明</div>
+  </div>
+  <div class="col"><h4>🏪 商家端</h4>
+    <div><b>发布</b>：模板发布、粘贴群消息 AI 识别、急招推送</div>
+    <div><b>工作台</b>：候选人智能排序、一键录用</div>
+    <div><b>到岗看板</b>：签到状态、爽约自动替补</div>
+    <div><b>人才库</b>：熟客学生、一键复聘邀约</div>
+  </div>
+  <div class="col"><h4>⚙️ 平台能力</h4>
+    <div><b>匹配引擎</b>：时间 × 距离 × 技能 × 信用</div>
+    <div><b>信任体系</b>：学生/商家认证、双向信用分</div>
+    <div><b>资金托管</b>：工资预存、完工结算</div>
+    <div><b>渠道打通</b>：岗位卡片一键转发到群</div>
+  </div>
+</div>
+
+<h2 id="s-flow"><span class="no">05</span>核心闭环</h2>
+<div class="flow">
+  <div class="st">商家发布<small>工资托管</small></div><span class="ar">→</span>
+  <div class="st hl">智能匹配<small>推送给空闲学生</small></div><span class="ar">→</span>
+  <div class="st">一键报名<small>冲突检测</small></div><span class="ar">→</span>
+  <div class="st">商家录用<small>+ 替补池</small></div><span class="ar">→</span>
+  <div class="st hl">定位签到<small>记录工时</small></div><span class="ar">→</span>
+  <div class="st">完工日结<small>2h 到账</small></div><span class="ar">→</span>
+  <div class="st hl">双向评价<small>沉淀信用与技能</small></div>
+</div>
+<p>评价产生的<strong>信用分与技能等级</strong>又会反过来影响下一次匹配：越靠谱的学生越容易被优先推荐，越守约的商家越容易招满，形成正向飞轮。</p>
+
+<h2 id="s-highlight"><span class="no">06</span>核心亮点</h2>
+<h3>① 智能匹配：从"人找活"到"活找人"</h3>
+<div class="formula">匹配度 = <em>时间吻合</em> × 35% + <em>通勤距离</em> × 25% + <em>技能匹配</em> × 25% + <em>信用分</em> × 15%<br/>
+· 时间吻合 = 岗位时长中落在学生空闲时段内的比例<br/>
+· 通勤距离 = 1km 内满分，超过 7km 归零<br/>
+· 技能匹配 = 学生技能等级 / 岗位要求等级（封顶 1）</div>
+<p>学生只需设置一次周末空闲时段，推荐列表就会<strong>实时重排</strong>，每张卡片都会告诉你"为什么推荐"。报名时自动检测和已报名岗位的<strong>时间冲突</strong>。</p>
+<h3>② 履约保障：解决"放鸽子"和"拿不到钱"</h3>
+<ul>
+  <li><strong>信用分</strong>：初始 100 分。准时到岗 +2，开工前 24h 内取消 -10，无故缺席 -20 并暂停报名 7 天。</li>
+  <li><strong>替补池</strong>：商家录用时可以同时设置备选，有人爽约时系统<strong>自动通知替补顶上</strong>。</li>
+  <li><strong>工资托管</strong>：商家发布岗位时预存工资，完工确认后 2 小时内到账，平台不向学生收取任何费用。</li>
+</ul>
+<h3>③ 成长价值：让零散兼职变成可积累的资产</h3>
+<ul>
+  <li>每完成一单，按岗位类别<strong>自动积累技能经验</strong>（收银、沟通、活动执行……），等级越高，能匹配的岗位越好。</li>
+  <li>一键生成<strong>兼职经历证明</strong>（工时、商家评价、技能等级），可以写进简历、用于实习申请。</li>
+</ul>
+<h3>④ 打破信息差：和微信群共生，而不是对抗</h3>
+<ul>
+  <li>学生<strong>按时段订阅</strong>，有匹配的新岗位就推送提醒，不用再"蹲群"。</li>
+  <li>商家把原来发在群里的文字<strong>直接粘贴</strong>，AI 自动识别生成结构化岗位，学习成本几乎为零。</li>
+  <li>岗位卡片可以一键转发到微信群，群成为平台的引流入口，每次转发都是带认证、带担保的标准信息。</li>
+</ul>
+
+<h2 id="s-metric"><span class="no">07</span>关键指标与迭代路线</h2>
+<p><strong>北极星指标：每周末成功履约的订单数</strong>（同时反映供需两侧的活跃度和信任度）。</p>
+<p>过程指标：商家招满时长 · 到岗率 · 学生 7 日复投率 · 商家复聘率 · 纠纷率。</p>
+<div class="road" style="margin-top:12px">
+  <div><b>V1 单校冷启动</b><p>先选 1 所高校周边 3km，地推签约 50 家高频用工商家（茶饮、商超、会展），用校园大使和社群转发拉动学生侧。</p></div>
+  <div><b>V2 信任与效率</b><p>上线工资托管、替补池、熟客复聘；接入用工意外险；用商家历史数据预测周末用工高峰并提前推送。</p></div>
+  <div><b>V3 规模化</b><p>扩展到城市多校区；商家 SaaS（排班、考勤）；技能认证与企业实习对接，打通"兼职 → 实习"的成长路径。</p></div>
+</div>
+<p class="muted" style="margin-top:28px">说明：本原型所有商家、学生、岗位数据均为虚构示例，数据仅保存在当前浏览器中。</p>
+`;
+
+</script>
+  <script>
+/* ============================================================
+ * 周末帮 · 原型主程序（纯前端，无框架，数据存于浏览器 localStorage）
+ * ============================================================ */
+
+const STORE_KEY = 'weekendgig_v1';
+const clone = (o) => JSON.parse(JSON.stringify(o));
+
+function freshState() {
+  return {
+    role: 'student',
+    route: { student: { page: 'home' }, merchant: { page: 'dash' } },
+    me: clone(ME),
+    jobs: clone(JOBS),
+    orders: clone(ORDERS),
+    filter: { cat: 'all', sort: 'match' },
+    seq: 100,
+  };
+}
+
+let state;
+try { state = JSON.parse(localStorage.getItem(STORE_KEY)) || freshState(); } catch (e) { state = freshState(); }
+let ui = { modal: null, toast: null };
+const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) { /* 隐私模式等情况下忽略 */ } };
+
+/* ---------------- 工具函数 ---------------- */
+const $ = (s) => document.querySelector(s);
+const fmtT = (h) => `${String(Math.floor(h)).padStart(2, '0')}:${h % 1 ? '30' : '00'}`;
+const md = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+const dayName = (day) => (day === 'sat' ? '周六' : '周日');
+const dayLabel = (day) => `${dayName(day)} ${md(WEEKEND[day])}`;
+const hoursOf = (j) => j.e - j.s;
+const job = (id) => state.jobs.find((j) => j.id === id);
+const merchant = (j) => MERCHANTS[j.mid];
+const lv = (xp) => Math.min(5, Math.floor((xp || 0) / 100));
+const myLevels = () => Object.fromEntries(SKILLS.map((k) => [k, lv(state.me.xp[k])]));
+const filled = (j) => j.filledBase + j.hired.length + (state.orders.some((o) => o.jobId === j.id && ['hired', 'working', 'done', 'settled', 'reviewed'].includes(o.status)) && !j.hired.includes('me') ? 1 : 0);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const jobStart = (j) => { const d = new Date(WEEKEND[j.day]); d.setHours(Math.floor(j.s), (j.s % 1) * 60); return d; };
+
+function creditLevel(c) {
+  if (c >= 95) return { name: '优秀', color: 'green' };
+  if (c >= 85) return { name: '良好', color: 'blue' };
+  if (c >= 70) return { name: '一般', color: 'yellow' };
+  return { name: '受限', color: 'red' };
+}
+
+/* ---------------- 核心：匹配算法 ----------------
+ * 匹配度 = 时间吻合 35% + 距离 25% + 技能 25% + 信用 15%
+ * profile: { slots, dist(对候选人)/或用岗位距离, skills(等级), credit }
+ */
+function overlapHours(slots, j) {
+  return SLOTS.filter((s) => slots.includes(s.id) && s.day === j.day)
+    .reduce((sum, s) => sum + Math.max(0, Math.min(s.e, j.e) - Math.max(s.s, j.s)), 0);
+}
+
+function matchScore(profile, j, dist) {
+  const H = hoursOf(j);
+  const ov = Math.min(H, overlapHours(profile.slots, j));
+  const t = ov / H;
+  const d = dist <= 1 ? 1 : Math.max(0, 1 - (dist - 1) / 6);
+  const req = Object.entries(j.skills);
+  const s = req.length ? req.reduce((a, [k, need]) => a + Math.min(1, (profile.skills[k] || 0) / need), 0) / req.length : 0.8;
+  const c = Math.max(0, (profile.credit - 60) / 40);
+  const total = Math.round((t * 35 + d * 25 + s * 25 + c * 15));
+  return { total, t, d, s, c, ov, H };
+}
+
+function myMatch(j) {
+  return matchScore({ slots: state.me.slots, skills: myLevels(), credit: state.me.credit }, j, j.dist);
+}
+
+function reasonsFor(j, m) {
+  const r = [];
+  if (m.t >= 1) r.push(['good', '⏰ 时间完全吻合']);
+  else if (m.t > 0) r.push(['warn', `⏰ 吻合 ${m.ov}/${m.H} 小时`]);
+  else r.push(['bad', '⏰ 不在你的空闲时段']);
+  if (j.dist <= 1.5) r.push(['good', `📍 ${j.dist}km · 步行可达`]);
+  else if (j.dist <= 4) r.push(['warn', `📍 ${j.dist}km · 骑车约 ${Math.round(j.dist * 4)} 分钟`]);
+  else r.push(['bad', `📍 ${j.dist}km · 较远`]);
+  const lvls = myLevels();
+  Object.entries(j.skills).forEach(([k, need]) => {
+    const have = lvls[k] || 0;
+    r.push(have >= need ? ['good', `✓ ${k} Lv${have}`] : ['warn', `${k} 需 Lv${need}（你 Lv${have}）`]);
+  });
+  return r;
+}
+
+function conflictOf(j) {
+  // 与已报名/已录用订单时间冲突检测
+  return state.orders
+    .filter((o) => ['applied', 'hired', 'working'].includes(o.status))
+    .map((o) => job(o.jobId))
+    .find((x) => x && x.id !== j.id && x.day === j.day && Math.max(x.s, j.s) < Math.min(x.e, j.e));
+}
+
+const orderOf = (jobId) => state.orders.find((o) => o.jobId === jobId && o.status !== 'cancelled');
+
+/* ---------------- 视图组件 ---------------- */
+function ring(score, size = 46) {
+  const r = size / 2 - 4, C = 2 * Math.PI * r;
+  const color = score >= 80 ? 'var(--green)' : score >= 60 ? 'var(--primary)' : 'var(--ink-3)';
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="#F0F1F4" stroke-width="4"/>
+    <circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${color}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - score / 100)}"/></svg>
+    <b style="color:${color}">${score}</b>${size < 50 ? '<small>匹配度</small>' : ''}</div>`;
+}
+
+const mlogo = (m, size = 42) => `<div class="mlogo" style="background:${m.color}22;width:${size}px;height:${size}px">${m.logo}</div>`;
+
+function jobCard(j) {
+  const m = merchant(j), mt = myMatch(j), o = orderOf(j.id);
+  const left = j.head - filled(j);
+  return `<button class="job ${o ? 'applied' : ''}" data-act="go" data-page="job" data-id="${j.id}">
+    <div class="job-top">
+      ${mlogo(m)}
+      <div class="job-main">
+        <div class="job-title">${esc(j.title)} ${j.urgent ? '<span class="tag red">急招</span>' : ''} ${o ? '<span class="tag blue">已报名</span>' : ''}</div>
+        <div class="job-m">${m.name} <span class="verified">✔ 已认证</span> · ⭐ ${m.rating}</div>
+      </div>
+      ${ring(mt.total)}
+    </div>
+    <div class="job-info">
+      <div class="job-time">
+        <div>🗓 ${dayLabel(j.day)} ${fmtT(j.s)}-${fmtT(j.e)}</div>
+        <div>👥 还差 ${left} 人 · ${j.perks.slice(0, 2).join(' · ')}</div>
+      </div>
+      <div class="wage"><b>${j.wage}</b><span>元/时</span><div>预计 ¥${Math.round(j.wage * hoursOf(j))}</div></div>
+    </div>
+    <div class="reasons">${reasonsFor(j, mt).map(([c, t]) => `<span class="reason ${c}">${t}</span>`).join('')}</div>
+  </button>`;
+}
+
+function statusbar() {
+  const d = new Date();
+  return `<div class="statusbar"><span>${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}</span><span>📶 🔋</span></div>`;
+}
+
+function plainHeader(title, back = true) {
+  return `<div class="app-header plain">${back ? '<button class="back" data-act="back">‹</button>' : '<span style="width:32px"></span>'}<h2>${title}</h2></div>`;
+}
+
+/* ---------------- 学生端 · 发现页 ---------------- */
+function studentHome() {
+  const me = state.me, f = state.filter;
+  const freeH = SLOTS.filter((s) => me.slots.includes(s.id)).reduce((a, s) => a + s.e - s.s, 0);
+  let list = state.jobs.filter((j) => f.cat === 'all' || j.cat === f.cat);
+  const withM = list.map((j) => ({ j, m: myMatch(j) }));
+  if (f.sort === 'match') withM.sort((a, b) => b.m.total - a.m.total);
+  if (f.sort === 'dist') withM.sort((a, b) => a.j.dist - b.j.dist);
+  if (f.sort === 'wage') withM.sort((a, b) => b.j.wage - a.j.wage);
+  const fits = state.jobs.filter((j) => myMatch(j).t > 0).length;
+  const urgent = state.jobs.filter((j) => j.urgent && filled(j) < j.head);
+  const cl = creditLevel(me.credit);
+
+  const grid = ['sat', 'sun'].map((day) => `
+    <div class="d">${dayName(day)}<small>${md(WEEKEND[day])}</small></div>
+    ${SLOTS.filter((s) => s.day === day).map((s) => `<button class="slot-btn ${me.slots.includes(s.id) ? 'on' : ''}" data-act="toggleSlot" data-id="${s.id}">${s.label.slice(2)}</button>`).join('')}
+  `).join('');
+
+  return `
+  <div class="app-header">
+    <div class="home-top">
+      <div class="loc">📍 示例大学 · 东门 <small>▾</small></div>
+      <div class="credit-chip">🛡 信用 ${me.credit} · ${cl.name}</div>
+    </div>
+    <div class="search">🔍 搜索岗位 / 商家，如"茶饮""家教"</div>
+  </div>
+  <div class="app-body" id="body">
+    <div class="slot-card">
+      <div class="h"><h3>🗓 这个周末，你什么时候有空？</h3><span>点击切换</span></div>
+      <div class="slot-grid">${grid}</div>
+      <div class="slot-foot"><span>空闲 <b>${freeH}</b>h · 匹配到 <b>${fits}</b> 个岗位</span><span>🔔 新岗位自动提醒</span></div>
+    </div>
+
+    ${urgent.length ? `<div class="sec-title"><h3>🔥 附近急招</h3><span>商家急需，录用更快</span></div>
+    <div class="hscroll">${urgent.map((j) => {
+      const m = merchant(j);
+      return `<div class="urgent-card" data-act="go" data-page="job" data-id="${j.id}">
+        <div class="tags"><span class="tag red">急招</span><span class="tag">${j.dist}km</span></div>
+        <div class="t">${m.logo} ${esc(j.title)}</div>
+        <div class="muted">${dayLabel(j.day)} ${fmtT(j.s)}-${fmtT(j.e)}</div>
+        <div class="w" style="margin-top:4px">${j.wage} 元/时</div>
+        <div class="left">仅剩 ${j.head - filled(j)} 个名额</div></div>`;
+    }).join('')}</div>` : ''}
+
+    <div class="sec-title"><h3>为你推荐</h3><span>按时间 · 距离 · 技能 · 信用匹配</span></div>
+    <div class="chips">${CATS.map((c) => `<button class="chip ${f.cat === c.id ? 'on' : ''}" data-act="cat" data-id="${c.id}">${c.icon} ${c.name}</button>`).join('')}</div>
+    <div class="sort-row">
+      ${[['match', '智能匹配'], ['dist', '离我最近'], ['wage', '时薪最高']].map(([k, n]) => `<button class="${f.sort === k ? 'on' : ''}" data-act="sort" data-id="${k}">${n}</button>`).join('')}
+    </div>
+    ${withM.length ? withM.map(({ j }) => jobCard(j)).join('') : '<div class="empty"><div class="e">🫥</div>这个分类暂时没有岗位，订阅后有新岗位第一时间通知你</div>'}
+  </div>`;
+}
+
+/* ---------------- 学生端 · 岗位详情 ---------------- */
+function studentJob(id) {
+  const j = job(id), m = merchant(j), mt = myMatch(j), o = orderOf(id), cf = conflictOf(j);
+  const lvls = myLevels();
+  const H = hoursOf(j);
+  const skillNote = Object.entries(j.skills).map(([k, n]) => `${k}${(lvls[k] || 0) >= n ? '✓' : '✗'}`).join(' ');
+  const rows = [
+    ['时间吻合', 35, mt.t, mt.t >= 1 ? '完全在空闲时段' : mt.t > 0 ? `吻合 ${mt.ov}/${H}h` : '不在空闲时段'],
+    ['通勤距离', 25, mt.d, `${j.dist}km`],
+    ['技能匹配', 25, mt.s, skillNote],
+    ['信用加成', 15, mt.c, `信用分 ${state.me.credit}`],
+  ];
+  let btn;
+  if (o) btn = `<button class="btn block disabled">已报名 · 查看进度</button>`;
+  else if (filled(j) >= j.head) btn = `<button class="btn block secondary" data-act="toast" data-msg="已加入候补，有人取消时会第一时间通知你">名额已满 · 加入候补</button>`;
+  else btn = `<button class="btn block primary" data-act="apply" data-id="${j.id}">一键报名</button>`;
+
+  return `${plainHeader('岗位详情')}
+  <div class="app-body" id="body">
+    <div class="detail-hero">
+      <div class="tags">${j.urgent ? '<span class="tag red">🔥 急招</span>' : ''}<span class="tag orange">💰 平台担保 · 日结</span><span class="tag">${CATS.find((c) => c.id === j.cat).name}</span></div>
+      <h1 style="margin-top:8px">${esc(j.title)}</h1>
+      <div class="pay"><b>${j.wage}</b><span>元/小时</span><span class="muted">· 共 ${H} 小时，预计收入 <b style="font-size:14px;color:var(--ink)">¥${Math.round(j.wage * H)}</b></span></div>
+      <div class="kv">
+        <div><b>${dayName(j.day)} ${md(WEEKEND[j.day])}</b><span>${fmtT(j.s)}-${fmtT(j.e)}</span></div>
+        <div><b>${j.dist}km</b><span>距你</span></div>
+        <div><b>${filled(j)}/${j.head}</b><span>已录用/需求</span></div>
+      </div>
+    </div>
+
+    ${cf ? `<div class="alert bad" style="margin-top:10px">⚠️ <div>与你已报名的「${esc(cf.title)}」（${fmtT(cf.s)}-${fmtT(cf.e)}）时间冲突，报名前请先确认能否兼顾。</div></div>` : ''}
+
+    <div class="card match-box" style="margin-top:10px;padding:12px">
+      <div style="display:flex;align-items:center;gap:10px">${ring(mt.total, 40)}<b style="font-size:14px">匹配度</b></div>
+      <div class="tags" style="margin-top:8px">${reasonsFor(j, mt).map(([c, t]) => `<span class="reason ${c}">${t}</span>`).join('')}</div>
+    </div>
+
+    <div class="card">
+      <h4>📋 工作内容</h4>
+      <p class="p">${esc(j.desc)}</p>
+      <div class="tags" style="margin-top:10px">${j.perks.map((p) => `<span class="tag green">${p}</span>`).join('')}
+      ${Object.entries(j.skills).map(([k, n]) => `<span class="tag blue">${k} Lv${n}+</span>`).join('')}</div>
+    </div>
+
+    <div class="card">
+      <div class="merchant-row">${mlogo(m, 46)}<div style="flex:1"><div class="n">${m.name} <span class="tag blue">✔ 营业执照已认证</span></div><div class="muted" style="margin-top:3px">${m.type} · 📍 ${m.addr}</div></div></div>
+      <div class="mstats">
+        <div><b>⭐ ${m.rating}</b><span>学生评分</span></div>
+        <div><b>${m.payOnTime}%</b><span>准时结算率</span></div>
+        <div><b>${m.rehire}%</b><span>学生回头率</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>🛡 履约保障</h4>
+      <div class="rule-list">
+        <div>💰 <span>工资由商家<b>提前托管</b>到平台，完工确认后 2 小时内到账</span></div>
+        <div>📍 <span>到岗时在门店 300m 内<b>定位签到</b>，自动记录工时</span></div>
+        <div>⏱ <span>开工前 24 小时以上可免责取消；临时爽约将扣信用分</span></div>
+        <div>🧾 <span>完工后自动计入<b>兼职履历</b>，可生成经历证明</span></div>
+      </div>
+    </div>
+    <p class="muted" style="text-align:center;margin-top:14px">平台承诺：不收取学生任何押金、中介费</p>
+  </div>
+  <div class="bottom-bar">
+    <button class="icon-btn" data-act="share" data-id="${j.id}"><span>↗</span>转发到群</button>
+    <button class="icon-btn" data-act="toast" data-msg="已收藏，开工前会提醒你"><span>☆</span>收藏</button>
+    ${btn}
+  </div>`;
+}
+
+/* ---------------- 弹层 ---------------- */
+function applySheet(id) {
+  const j = job(id), m = merchant(j), cf = conflictOf(j), mt = myMatch(j);
+  return `<div class="sheet">
+    <div class="grab"></div><h3>确认报名</h3>
+    <div class="card" style="box-shadow:none;background:var(--bg)">
+      <div class="merchant-row">${mlogo(m, 40)}<div><b>${esc(j.title)}</b><div class="muted">${m.name} · ${dayLabel(j.day)} ${fmtT(j.s)}-${fmtT(j.e)}</div></div></div>
+    </div>
+    ${cf ? `<div class="alert bad" style="margin-top:10px">⚠️ <div>与「${esc(cf.title)}」时间冲突，若两边都被录用请尽早取消其中一个。</div></div>` : ''}
+    ${mt.t < 1 ? `<div class="alert warn" style="margin-top:10px">⏰ <div>该岗位有部分时间不在你设置的空闲时段内，请确认能全程到岗。</div></div>` : ''}
+    <div class="alert info" style="margin-top:10px">📨 <div>报名后，系统会把你的<b>技能等级、信用分、历史评价</b>推送给商家，一般 <b>30 分钟内</b>就会收到录用结果。</div></div>
+    <div class="rule-list" style="margin-top:12px;padding:0 4px">
+      <div>✅ 录用后开工前 24h 以上取消：不扣分</div>
+      <div>⚠️ 开工前 24h 内取消：信用分 -10</div>
+      <div>❌ 无故缺席：信用分 -20，暂停报名 7 天</div>
+    </div>
+    <div class="sheet-actions"><button class="btn secondary block" data-act="close">再想想</button><button class="btn primary block" data-act="confirmApply" data-id="${j.id}">确认报名</button></div>
+  </div>`;
+}
+
+function shareSheet(id) {
+  const j = job(id), m = merchant(j);
+  return `<div class="sheet">
+    <div class="grab"></div><h3>转发给同学 / 微信群</h3>
+    <div style="border-radius:16px;padding:16px;background:linear-gradient(135deg,#FF6A3D,#FF9A5A);color:#fff;display:flex;gap:12px;align-items:center">
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:18px">${m.logo} ${esc(j.title)}</div>
+        <div style="font-size:28px;font-weight:800;margin:6px 0">${j.wage}<span style="font-size:14px"> 元/时</span></div>
+        <div style="font-size:13px;opacity:.95">${dayLabel(j.day)} ${fmtT(j.s)}-${fmtT(j.e)}</div>
+        <div style="font-size:12px;margin-top:6px;opacity:.9">✔ 平台担保 · 还差 ${j.head - filled(j)} 人</div>
+      </div>
+      <div style="width:72px;height:72px;background:#fff;border-radius:10px;display:grid;place-items:center;color:#1D2129;font-size:34px">▦</div>
+    </div>
+    <p class="muted" style="margin-top:10px;text-align:center">群里扫码即可报名，无需进群找人</p>
+    <div class="sheet-actions"><button class="btn primary block" data-act="close">复制卡片链接</button></div>
+  </div>`;
+}
+
+/* ---------------- 未完成页面占位 ---------------- */
+const wip = (title, desc) => `${plainHeader(title, false)}<div class="app-body"><div class="wip"><div class="e">🚧</div><h3>${title}</h3><p class="muted">${desc}</p></div></div>`;
+
+/* ---------------- 渲染 ---------------- */
+function studentTabs(page) {
+  const active = state.orders.filter((o) => ['applied', 'hired', 'working', 'done', 'settled'].includes(o.status)).length;
+  const t = [['home', '🔍', '发现'], ['orders', '📋', '我的兼职'], ['growth', '🌱', '成长']];
+  return `<nav class="tabbar">${t.map(([p, i, n]) => `<button class="${page === p ? 'on' : ''}" data-act="tab" data-page="${p}"><span class="ti">${i}</span>${n}${p === 'orders' && active ? `<span class="dot">${active}</span>` : ''}</button>`).join('')}</nav>`;
+}
+
+function merchantTabs(page) {
+  const t = [['dash', '📊', '工作台'], ['post', '➕', '发布'], ['talent', '👥', '人才库']];
+  return `<nav class="tabbar">${t.map(([p, i, n]) => `<button class="${page === p ? 'on' : ''}" data-act="tab" data-page="${p}"><span class="ti">${i}</span>${n}</button>`).join('')}</nav>`;
+}
+
+function render() {
+  const prev = $('#body');
+  const key = JSON.stringify(state.route[state.role]) + state.role;
+  const keep = prev && render.key === key ? prev.scrollTop : 0;
+  render.key = key;
+
+  const r = state.route[state.role];
+  let html = statusbar();
+  if (state.role === 'student') {
+    if (r.page === 'home') html += studentHome() + studentTabs('home');
+    else if (r.page === 'job') html += studentJob(r.id);
+    else if (r.page === 'orders') html += wip('我的兼职', '订单状态流转：报名 → 录用 → 签到 → 完工 → 结算 → 评价（下一步制作）') + studentTabs('orders');
+    else if (r.page === 'growth') html += wip('成长', '信用分 · 技能雷达 · 收入统计 · 兼职经历证明（下一步制作）') + studentTabs('growth');
+  } else {
+    html += wip('商家端', '工作台 · 发布岗位（含粘贴群消息智能识别）· 候选人筛选 · 替补池 · 人才库（下一步制作）') + merchantTabs(r.page);
+  }
+  if (ui.modal) html += `<div class="mask" data-act="maskClose">${ui.modal}</div>`;
+  if (ui.toast) html += `<div class="toast">${ui.toast}</div>`;
+  $('#app').innerHTML = html;
+  const b = $('#body');
+  if (b) b.scrollTop = keep;
+
+  document.querySelectorAll('.role-switch button').forEach((b) => b.classList.toggle('on', b.dataset.role === state.role));
+}
+
+let toastTimer;
+function toast(msg) {
+  ui.toast = msg; render();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { ui.toast = null; render(); }, 2200);
+}
+
+function go(page, extra = {}) {
+  const cur = state.route[state.role];
+  state.route[state.role] = { page, ...extra, from: page === cur.page ? cur.from : cur };
+  ui.modal = null; save(); render();
+}
+
+/* ---------------- 交互 ---------------- */
+const actions = {
+  role: (d) => { state.role = d.role; ui.modal = null; save(); render(); },
+  tab: (d) => { state.route[state.role] = { page: d.page }; save(); render(); },
+  go: (d) => go(d.page, { id: d.id }),
+  back: () => { const r = state.route[state.role]; state.route[state.role] = r.from || { page: state.role === 'student' ? 'home' : 'dash' }; save(); render(); },
+  toggleSlot: (d) => {
+    const s = state.me.slots;
+    state.me.slots = s.includes(d.id) ? s.filter((x) => x !== d.id) : [...s, d.id];
+    save(); render();
+  },
+  cat: (d) => { state.filter.cat = d.id; save(); render(); },
+  sort: (d) => { state.filter.sort = d.id; save(); render(); },
+  toast: (d) => toast(d.msg),
+  apply: (d) => { ui.modal = applySheet(d.id); render(); },
+  share: (d) => { ui.modal = shareSheet(d.id); render(); },
+  close: () => { ui.modal = null; render(); },
+  maskClose: (d, el, e) => { if (e.target === el) { ui.modal = null; render(); } },
+  confirmApply: (d) => {
+    const j = job(d.id);
+    state.orders.unshift({ id: 'o' + state.seq++, jobId: j.id, status: 'applied', log: [{ t: '刚刚', text: '报名成功，已推送给商家' }] });
+    if (j.mid === 'm1' && !j.applicants.includes('me')) j.applicants.unshift('me');
+    ui.modal = null; save();
+    toast(`🎉 报名成功！${merchant(j).name} 将在 30 分钟内处理`);
+  },
+  openDoc: () => document.body.classList.add('doc-open'),
+  closeDoc: () => document.body.classList.remove('doc-open'),
+  reset: () => {
+    if (!confirm('确定重置所有演示数据吗？')) return;
+    state = freshState(); ui = { modal: null, toast: null }; save(); render();
+  },
+  guide: (d) => {
+    document.body.classList.remove('doc-open');
+    state.role = d.role;
+    state.route[d.role] = { page: d.page, id: d.id };
+    ui.modal = null; save(); render();
+    if (d.modal === 'apply') { ui.modal = applySheet(d.id); render(); }
+  },
+};
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-act]');
+  if (!el) return;
+  const fn = actions[el.dataset.act];
+  if (fn) { fn(el.dataset, el, e); }
+});
+
+$('#doc-content').innerHTML = DOC_HTML;
+render();
+
+</script>
+</body>
+</html>
